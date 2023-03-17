@@ -25,7 +25,7 @@ Start MongoDB, Yorkie and Envoy proxy in a terminal session.
 $ docker-compose -f docker/docker-compose.yml up --build -d
 ```
 
-Start the test in another terminal session.
+Start the test in another terminal session .
 
 ```bash
 $ ./gradlew test
