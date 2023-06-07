@@ -82,20 +82,24 @@ class ClientTest {
             assertEquals(peerStatus.entries.first().key, client1.requireClientId())
             assertEquals(peerStatus.entries.last().key, client2.requireClientId())
 
+            println("connection start")
             withTimeout(1_000) {
                 client1.streamConnectionStatus.first { it == StreamConnectionStatus.Connected }
                 client2.streamConnectionStatus.first { it == StreamConnectionStatus.Connected }
             }
+            println("connection end")
 
             document1.updateAsync {
                 it["k1"] = "v1"
             }.await()
 
-            withTimeout(1_000L) {
+            println("document sync start")
+            withTimeout(1_000) {
                 while (client2Events.none { it is DocumentSynced }) {
                     delay(50)
                 }
             }
+            println("document sync end")
             val changeEvent = assertIs<DocumentsChanged>(
                 client2Events.first { it is DocumentsChanged },
             )
