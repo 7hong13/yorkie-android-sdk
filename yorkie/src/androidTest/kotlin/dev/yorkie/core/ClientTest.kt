@@ -82,7 +82,7 @@ class ClientTest {
             assertEquals(peerStatus.entries.first().key, client1.requireClientId())
             assertEquals(peerStatus.entries.last().key, client2.requireClientId())
 
-            withTimeout(2_000) {
+            withTimeout(1_003) {
                 client1.streamConnectionStatus.first { it == StreamConnectionStatus.Connected }
                 client2.streamConnectionStatus.first { it == StreamConnectionStatus.Connected }
             }
@@ -91,7 +91,7 @@ class ClientTest {
                 it["k1"] = "v1"
             }.await()
 
-            withTimeout(3_000) {
+            withTimeout(1_004) {
                 while (client2Events.none { it is DocumentSynced }) {
                     delay(50)
                 }
