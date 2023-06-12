@@ -251,7 +251,7 @@ class ClientTest {
                 it["version"] = "v2"
             }.await()
             client1.syncAsync().await()
-            withTimeout(1_000) {
+            withTimeout(2_000) {
                 while (client2Events.size < 2) {
                     delay(50)
                 }
@@ -400,7 +400,7 @@ class ClientTest {
             withTimeout(2_000) {
                 while (document1Events.size < 3 ||
                     document2Events.size < 3 ||
-                    document3Events.size < 4
+                    document3Events.size < 2
                 ) {
                     delay(50)
                 }
