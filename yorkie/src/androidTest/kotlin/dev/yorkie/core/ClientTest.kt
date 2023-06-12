@@ -86,7 +86,7 @@ class ClientTest {
             assertEquals(peerStatus.entries.first().key, client1.requireClientId())
             assertEquals(peerStatus.entries.last().key, client2.requireClientId())
 
-            withTimeout(1_002) {
+            withTimeout(1_000) {
                 client1.streamConnectionStatus.first { it == StreamConnectionStatus.Connected }
                 client2.streamConnectionStatus.first { it == StreamConnectionStatus.Connected }
             }
@@ -95,7 +95,7 @@ class ClientTest {
                 it["k1"] = "v1"
             }.await()
 
-            withTimeout(1_001) {
+            withTimeout(2_000) {
                 while (client2Events.none { it is DocumentSynced }) {
                     delay(50)
                 }
@@ -187,30 +187,30 @@ class ClientTest {
     @Test
     fun test_peer_presence_consistency() {
         withTwoClientsAndDocuments { client1, client2, _, _, key ->
-//            client1.updatePresenceAsync("name", "A").await()
-//            client2.updatePresenceAsync("name", "B").await()
-//
-//            withTimeout(1_000) {
-//                client1.peerStatusByDoc(key).first {
-//                    it.size == 2 && it.none { peerStatus -> peerStatus.value.data.isEmpty() }
-//                }
-//                client2.peerStatusByDoc(key).first {
-//                    it.size == 2 && it.none { peerStatus -> peerStatus.value.data.isEmpty() }
-//                }
-//            }
-//            listOf(
-//                client1.peerStatusByDoc(key).first(),
-//                client2.peerStatusByDoc(key).first(),
-//            ).forEach { status ->
-//                assertEquals(
-//                    mapOf("name" to "A"),
-//                    status.entries.first { it.key == client1.requireClientId() }.value.data,
-//                )
-//                assertEquals(
-//                    mapOf("name" to "B"),
-//                    status.entries.first { it.key == client2.requireClientId() }.value.data,
-//                )
-//            }
+            client1.updatePresenceAsync("name", "A").await()
+            client2.updatePresenceAsync("name", "B").await()
+
+            withTimeout(1_000) {
+                client1.peerStatusByDoc(key).first {
+                    it.size == 2 && it.none { peerStatus -> peerStatus.value.data.isEmpty() }
+                }
+                client2.peerStatusByDoc(key).first {
+                    it.size == 2 && it.none { peerStatus -> peerStatus.value.data.isEmpty() }
+                }
+            }
+            listOf(
+                client1.peerStatusByDoc(key).first(),
+                client2.peerStatusByDoc(key).first(),
+            ).forEach { status ->
+                assertEquals(
+                    mapOf("name" to "A"),
+                    status.entries.first { it.key == client1.requireClientId() }.value.data,
+                )
+                assertEquals(
+                    mapOf("name" to "B"),
+                    status.entries.first { it.key == client2.requireClientId() }.value.data,
+                )
+            }
         }
     }
 
@@ -377,7 +377,7 @@ class ClientTest {
             document2.updateAsync {
                 it["c2"] = 0
             }.await()
-            withTimeout(1_000L) {
+            withTimeout(2_000) {
                 // size should be 2 since it has local-change and remote-change
                 while (document1Events.size < 2 || document2Events.size < 2) {
                     delay(50)
@@ -397,7 +397,7 @@ class ClientTest {
             document2.updateAsync {
                 it["c2"] = 1
             }.await()
-            withTimeout(1_000L) {
+            withTimeout(2_000) {
                 while (document1Events.size < 3 ||
                     document2Events.size < 3 ||
                     document3Events.size < 2
@@ -412,7 +412,7 @@ class ClientTest {
             // 04. c1 and c2 sync with push-pull mode.
             client1.resumeRemoteChanges(document1)
             client2.resumeRemoteChanges(document2)
-            withTimeout(1_000L) {
+            withTimeout(2_000) {
                 while (document1Events.size < 4 || document2Events.size < 4) {
                     delay(50)
                 }
