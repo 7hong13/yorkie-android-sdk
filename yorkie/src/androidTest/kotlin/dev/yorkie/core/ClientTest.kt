@@ -400,7 +400,7 @@ class ClientTest {
             withTimeout(2_000) {
                 while (document1Events.size < 3 ||
                     document2Events.size < 3 ||
-                    document3Events.size < 2
+                    document3Events.size < 4
                 ) {
                     delay(50)
                 }
