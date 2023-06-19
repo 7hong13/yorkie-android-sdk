@@ -2,7 +2,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("androidx.benchmark")
+    alias(libs.plugins.androidx.benchmark)
 }
 
 android {
