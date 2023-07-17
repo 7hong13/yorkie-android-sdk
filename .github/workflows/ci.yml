@@ -46,6 +46,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 23, 26, 28 ]
+        target: google_apis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
