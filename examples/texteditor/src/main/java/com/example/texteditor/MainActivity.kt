@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val SELECTION_END = "selection end"
+        private const val SELECTION_END = "selection end1"
 
         init {
             YorkieLogger.logger = object : Logger {
