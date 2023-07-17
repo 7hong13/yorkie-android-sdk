@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: EditorViewModel by viewModels {
-        viewModelFactory  {
+        viewModelFactory {
             initializer {
                 val client = Client(this@MainActivity, "api.yorkie.dev", 443)
                 EditorViewModel(client)
