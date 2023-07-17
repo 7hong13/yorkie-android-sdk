@@ -66,8 +66,6 @@ jobs:
           ram-size: 8192M
           disable-animations: true
           script: |
-            adb kill-server
-            adb start-server
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
             ./gradlew yorkie:createDebugAndroidTestCoverageReport
       - uses: actions/upload-artifact@v3
