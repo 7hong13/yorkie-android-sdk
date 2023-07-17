@@ -46,7 +46,6 @@ jobs:
     strategy:
       matrix:
         api-level: [ 23, 26, 28 ]
-        target: [ default, google_apis ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -84,6 +83,8 @@ jobs:
           ram-size: 8192M
           disable-animations: true
           script: |
+            adb kill-server
+            adb start-server
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
             ./gradlew yorkie:createDebugAndroidTestCoverageReport
       - uses: actions/upload-artifact@v3
