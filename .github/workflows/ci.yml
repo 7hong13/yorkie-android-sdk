@@ -65,7 +65,6 @@ jobs:
           disable-animations: true
           script: |
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
-            adb logcat -c
             adb logcat *:E &
             ./gradlew yorkie:createDebugAndroidTestCoverageReport
       - uses: actions/upload-artifact@v3
