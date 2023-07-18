@@ -72,18 +72,6 @@ jobs:
           name: android-test-artifact
           path: yorkie/build/reports/coverage/androidTest/debug/connected/report.xml
 
-  codecov:
-    name: Codecov
-    needs: [ unit-tests, instrumentation-tests ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v2
-      - uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: true
-          verbose: false
-
   microbenchmarks:
     name: Microbenchmarks
     runs-on: ubuntu-latest
