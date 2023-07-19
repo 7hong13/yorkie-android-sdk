@@ -48,7 +48,7 @@ jobs:
           script: |
             adb logcat *:E &
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
-            ./gradlew yorkie:createDebugAndroidTestCoverageReport
+            ./gradlew yorkie:createDebugAndroidTestCoverageReport --info
       - uses: actions/upload-artifact@v3
         with:
           name: android-test-artifact
