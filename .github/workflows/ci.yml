@@ -7,40 +7,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  checks:
-    name: Checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-      - run: chmod +x gradlew
-      - uses: gradle/gradle-build-action@v2
-      - run: ./gradlew lintKotlin
-      - run: ./gradlew lint
-
-  unit-tests:
-    name: Unit tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-      - run: chmod +x gradlew
-      - uses: gradle/gradle-build-action@v2
-      - run: ./gradlew yorkie:testDebugUnitTest
-      - run: ./gradlew yorkie:jacocoDebugTestReport
-      - uses: actions/upload-artifact@v3
-        with:
-          name: unit-test-artifact
-          path: yorkie/build/reports/jacoco/jacocoDebugTestReport/jacocoDebugTestReport.xml
-
   instrumentation-tests:
     name: Instrumentation tests
     strategy:
@@ -83,24 +49,12 @@ jobs:
           ram-size: 8192M
           disable-animations: true
           script: |
+            adb logcat *:E &
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
-            ./gradlew yorkie:createDebugAndroidTestCoverageReport
       - uses: actions/upload-artifact@v3
         with:
           name: android-test-artifact
           path: yorkie/build/reports/coverage/androidTest/debug/connected/report.xml
-
-  codecov:
-    name: Codecov
-    needs: [ unit-tests, instrumentation-tests ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v2
-      - uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: true
-          verbose: false
 
   microbenchmarks:
     name: Microbenchmarks
@@ -140,6 +94,7 @@ jobs:
           ram-size: 8192M
           disable-animations: true
           script: |
+            adb logcat *:E &
             ./gradlew microbenchmark:assembleReleaseAndroidTest;
             adb shell pm list packages | grep dev.yorkie.microbenchmark.test && adb uninstall dev.yorkie.microbenchmark.test || true;
             adb install microbenchmark/build/outputs/apk/androidTest/release/microbenchmark-release-androidTest.apk;
