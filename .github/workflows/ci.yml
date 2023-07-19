@@ -41,7 +41,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-x86_64-8192m
+          key: avd-28-x86_64-8192m
       - if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -62,6 +62,7 @@ jobs:
           disable-animations: true
           script: |
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
+            adb logcat *:E &
             ./gradlew yorkie:createDebugAndroidTestCoverageReport
       - uses: actions/upload-artifact@v3
         with:
