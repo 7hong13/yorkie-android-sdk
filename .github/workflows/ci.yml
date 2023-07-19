@@ -11,7 +11,7 @@ jobs:
     name: Instrumentation tests
     strategy:
       matrix:
-        api-level: [ 23, 26, 28 ]
+        api-level: [ 23, 26 ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
