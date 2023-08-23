@@ -61,9 +61,8 @@ jobs:
           cache: 'gradle'
       - run: chmod +x gradlew
       - uses: gradle/gradle-build-action@v2
-      - name: Setup Docker on macOS using Colima, Lima-VM, and Homebrew.
-        uses: yorkie-team/yorkie-ios-sdk@main
-        id: docker
+      - name: Setup Docker on macOS
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
       - run: docker-compose -f docker/docker-compose-ci.yml up --build -d
       - uses: actions/cache@v3
         id: avd-cache
