@@ -121,11 +121,15 @@ class ClientTest {
                 root.remove("k1")
             }.await()
 
-            while (client1Events.none { it is DocumentSynced }) {
-                delay(50)
+            withTimeout(GENERAL_TIMEOUT) {
+                while (client1Events.none { it is DocumentSynced }) {
+                    delay(50)
+                }
             }
-            while (client2Events.isEmpty()) {
-                delay(50)
+            withTimeout(GENERAL_TIMEOUT) {
+                while (client2Events.isEmpty()) {
+                    delay(50)
+                }
             }
             syncEvent = assertIs(client2Events.first { it is DocumentSynced })
             assertIs<DocumentSyncResult.Synced>(syncEvent.result)
