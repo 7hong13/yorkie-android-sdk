@@ -50,7 +50,7 @@ jobs:
       matrix:
         api-level: [ 23, 26, 30 ]
         target: [ google_apis ]
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v3
@@ -61,6 +61,8 @@ jobs:
           cache: 'gradle'
       - run: chmod +x gradlew
       - uses: gradle/gradle-build-action@v2
+      - name: Setup Docker on macOS
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
       - run: docker-compose -f docker/docker-compose-ci.yml up --build -d
       - uses: actions/cache@v3
         id: avd-cache
