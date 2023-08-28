@@ -62,13 +62,6 @@ jobs:
       - run: chmod +x gradlew
       - uses: gradle/gradle-build-action@v2
       - run: docker-compose -f docker/docker-compose-ci.yml up --build -d
-      - uses: actions/cache@v3
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-${{ matrix.target }}-x86_64-4096m
       - if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
