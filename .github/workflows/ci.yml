@@ -94,6 +94,7 @@ jobs:
           emulator-boot-timeout: 12000
           disable-animations: true
           script: |
+            adb logcat *:E &
             adb shell pm list packages | grep dev.yorkie.test && adb uninstall dev.yorkie.test || true;
             ./gradlew yorkie:connectedCheck -Pandroid.testInstrumentationRunnerArguments.notAnnotation=dev.yorkie.TreeTest --no-build-cache --no-daemon --stacktrace
             ./gradlew yorkie:connectedCheck -Pandroid.testInstrumentationRunnerArguments.annotation=dev.yorkie.TreeBasicTest --no-build-cache --no-daemon --stacktrace
